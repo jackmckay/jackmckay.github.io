@@ -75,21 +75,19 @@ var FriendsGame = function (_React$Component2) {
 	_createClass(FriendsGame, [{
 		key: 'useMove',
 		value: function useMove() {
-			this.setState(function (prevState, props) {
-				if (prevState.movesLeft === 0) {
-					return {
-						movesLeft: 0,
-						gameComplete: true
-					};
-				} else {
+			if (this.state.movesLeft > 1) {
+				this.setState(function (prevState, props) {
 					return { movesLeft: prevState.movesLeft - 1 };
-				}
-			});
+				});
+			} else {
+				this.setState(function () {
+					return { movesLeft: 0, gameComplete: true };
+				});
+			}
 		}
 	}, {
 		key: 'addPoint',
 		value: function addPoint() {
-			console.log('hey');
 			this.setState(function (prevState) {
 				return { points: prevState.points + 1 };
 			});
@@ -115,11 +113,7 @@ var FriendsGame = function (_React$Component2) {
 		key: 'handlePick',
 		value: function handlePick(card) {
 			if (this.state.cardsLeft.length === 0) {
-				this.setState(function () {
-					return {
-						gameComplete: true
-					};
-				});
+				this.setState({ gameComplete: true });
 			} else {
 				this.setState(function (prevState) {
 					return { cardsLeft: prevState.cardsLeft.filter(function (cardToRemove) {
@@ -152,7 +146,7 @@ var FriendsGame = function (_React$Component2) {
 				_this3.setState(function () {
 					return { timerVisible: false };
 				});
-			}, 15000);
+			}, 20000);
 		}
 	}, {
 		key: 'render',
@@ -201,7 +195,7 @@ var FriendsGame = function (_React$Component2) {
 			return React.createElement(
 				'div',
 				null,
-				this.state.timerVisible ? React.createElement(Timer, { timeleft: 15 }) : React.createElement(Instructions, { points: this.state.points, movesLeft: this.state.movesLeft, cardToFind: this.state.cardToFind }),
+				this.state.timerVisible ? React.createElement(Timer, { timeleft: 20 }) : React.createElement(Instructions, { points: this.state.points, movesLeft: this.state.movesLeft, cardToFind: this.state.cardToFind }),
 				React.createElement(Cards, {
 					cards: this.state.cards,
 					cardsLeft: this.state.cardsLeft,
@@ -325,8 +319,6 @@ var Timer = function Timer(props) {
 	    _React$useState2 = _slicedToArray(_React$useState, 2),
 	    counter = _React$useState2[0],
 	    setCounter = _React$useState2[1];
-	// Third Attempts
-
 
 	React.useEffect(function () {
 		var timer = counter > 0 && setInterval(function () {
@@ -401,7 +393,7 @@ var Card = function (_React$Component3) {
 			this.setState({ incorrect: true, visible: true }, function () {
 				setTimeout(function () {
 					return _this5.setState({ incorrect: false, visible: false });
-				}, 500);
+				}, 600);
 			});
 		}
 	}, {
@@ -436,7 +428,7 @@ var Card = function (_React$Component3) {
 						visible: false
 					};
 				});
-			}, 15000);
+			}, 20000);
 		}
 	}, {
 		key: 'render',

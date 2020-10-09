@@ -78,6 +78,10 @@ p {
     pointer-events: none;
 }
 
+.flip-card-front {
+    background-image: url('/img/card-back.jpg');
+}
+
 .flip-card-front, .flip-card-back {
     position: absolute;
     width: 100%;
@@ -85,7 +89,6 @@ p {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     transition: background-color 0.5s;
-    background-image: url('/img/card-back.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
@@ -94,12 +97,14 @@ p {
 }
 
 .flip-card-back {
+    background: #0A0A0A;
+    border: 10px solid white;
     color: white;
     transform: rotateY(180deg);
 }
 
 .flip-card-back p {
-    background: black;
+    background: #0A0A0A;
     position: absolute;
     padding: 10px;
     bottom: 20px;
@@ -114,7 +119,6 @@ p {
     top: 0;
     background-position: center;
     background-size: cover;
-    border: 10px solid white;
 }
 
 .instructions-box {
