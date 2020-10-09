@@ -21,8 +21,13 @@ img {
     max-width: 100%;
 }
 
+h1 {
+    display: block;
+}
+
 p {
     line-height: 2;
+    display: block;
 }
 
 .container {
@@ -178,7 +183,7 @@ button:hover, a.button:hover {
     border-bottom: 2px solid #393939;
     border-radius: 0;
     background: #cccccc;
-    max-width: 700px;
+    max-width: 600px;
     margin: auto;
 }
 
@@ -194,6 +199,10 @@ button:hover, a.button:hover {
 
 .windows-panel .body {
     padding: 30px;
+}
+
+.windows-panel p {
+    margin: 20px 0;
 }
 
 .dark {

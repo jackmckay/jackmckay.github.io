@@ -76,7 +76,7 @@ var FriendsGame = function (_React$Component2) {
 		key: 'useMove',
 		value: function useMove() {
 			this.setState(function (prevState, props) {
-				if (prevState.movesLeft === 1) {
+				if (prevState.movesLeft === 0) {
 					return {
 						movesLeft: 0,
 						gameComplete: true
@@ -172,29 +172,23 @@ var FriendsGame = function (_React$Component2) {
 						React.createElement(
 							'h1',
 							null,
-							this.state.points === 10 ? 'You Win!' : 'Game over'
+							this.state.points === 10 ? 'You Win!' : 'Game over!'
 						),
-						React.createElement('img', { width: 30, src: this.state.points === 0 ? './img/smiley-dead.png' : './img/smiley-happy.png' }),
+						React.createElement('img', { width: 30, src: this.state.points === 10 ? './img/smiley-happy.png' : './img/smiley-dead.png' }),
 						React.createElement(
 							'h2',
 							null,
 							'Score: ',
 							this.state.points
 						),
-						this.state.points > 0 ? React.createElement(
-							'h3',
+						this.state.points === 10 ? React.createElement(
+							'p',
 							null,
-							'Congratulations! You found ',
-							React.createElement(
-								'strong',
-								null,
-								this.state.points
-							),
-							' F.R.I.E.N.D.S! Now let\'s celebrate with a meatball sub sandwich and never go on the internet ever again.'
+							'Congratulations! You found all of the F.R.I.E.N.D.S. Now let\'s celebrate with a meatball sub sandwich and never go on the internet ever again.'
 						) : React.createElement(
-							'h3',
+							'p',
 							null,
-							'Oh no! You didn\'t find any of your F.R.I.E.N.D.S. Now they\'re trapped in the internet forever.'
+							'Oh no! You didn\'t find all of your F.R.I.E.N.D.S. Now they\'re trapped in the internet forever! Drown your sorrows with a meatball sub sandwich and never go on the internet ever again.'
 						),
 						React.createElement(
 							'a',
@@ -352,7 +346,7 @@ var Timer = function Timer(props) {
 		),
 		React.createElement(
 			'div',
-			{ className: 'instructions-box' },
+			{ className: 'instructions-box text-center' },
 			React.createElement(
 				'h1',
 				null,
@@ -461,7 +455,11 @@ var Card = function (_React$Component3) {
 				React.createElement(
 					'div',
 					{ className: 'card-inner' },
-					React.createElement('div', { className: 'flip-card-front' }),
+					React.createElement(
+						'div',
+						{ className: 'flip-card-front' },
+						this.props.cardName
+					),
 					React.createElement(
 						'div',
 						{ className: 'flip-card-back' },
