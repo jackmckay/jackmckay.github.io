@@ -455,11 +455,7 @@ var Card = function (_React$Component3) {
 				React.createElement(
 					'div',
 					{ className: 'card-inner' },
-					React.createElement(
-						'div',
-						{ className: 'flip-card-front' },
-						this.props.cardName
-					),
+					React.createElement('div', { className: 'flip-card-front' }),
 					React.createElement(
 						'div',
 						{ className: 'flip-card-back' },
