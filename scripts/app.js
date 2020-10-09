@@ -11,7 +11,6 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 // import {Card} from './card';
-
 var App = function (_React$Component) {
 	_inherits(App, _React$Component);
 
@@ -20,34 +19,79 @@ var App = function (_React$Component) {
 
 		var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this, props));
 
-		_this.minusScore = _this.minusScore.bind(_this);
-		_this.getCardToFind = _this.getCardToFind.bind(_this);
-		_this.shuffleDeck = _this.shuffleDeck.bind(_this);
-		_this.handlePick = _this.handlePick.bind(_this);
-		_this.giveUp = _this.giveUp.bind(_this);
+		_this.startGame = _this.startGame.bind(_this);
 		_this.state = {
-			timerVisible: true,
-			score: 10,
-			cards: ['Rachel', 'Monica', 'Ross', 'Joey', 'Chandler', 'Phoebe', 'David', 'Mike', 'Gunther', 'Janice'],
-			cardsLeft: ['Rachel', 'Monica', 'Ross', 'Joey', 'Chandler', 'Phoebe', 'David', 'Mike', 'Gunther', 'Janice'],
-			cardToFind: '',
-			gameComplete: false
+			gameStarted: false
 		};
 		return _this;
 	}
 
 	_createClass(App, [{
-		key: 'minusScore',
-		value: function minusScore() {
+		key: 'startGame',
+		value: function startGame() {
+			this.setState(function () {
+				return { gameStarted: true };
+			});
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			if (!this.state.gameStarted) {
+				return React.createElement(WelcomeScreen, { startGame: this.startGame });
+			} else {
+				return React.createElement(FriendsGame, null);
+			}
+		}
+	}]);
+
+	return App;
+}(React.Component);
+
+var FriendsGame = function (_React$Component2) {
+	_inherits(FriendsGame, _React$Component2);
+
+	function FriendsGame(props) {
+		_classCallCheck(this, FriendsGame);
+
+		var _this2 = _possibleConstructorReturn(this, (FriendsGame.__proto__ || Object.getPrototypeOf(FriendsGame)).call(this, props));
+
+		_this2.useMove = _this2.useMove.bind(_this2);
+		_this2.getCardToFind = _this2.getCardToFind.bind(_this2);
+		_this2.shuffleDeck = _this2.shuffleDeck.bind(_this2);
+		_this2.handlePick = _this2.handlePick.bind(_this2);
+		_this2.addPoint = _this2.addPoint.bind(_this2);
+		_this2.state = {
+			timerVisible: true,
+			points: 0,
+			movesLeft: 10,
+			cards: ['Rachel', 'Monica', 'Ross', 'Joey', 'Chandler', 'Phoebe', 'David', 'Mike', 'Gunther', 'Janice'],
+			cardsLeft: ['Rachel', 'Monica', 'Ross', 'Joey', 'Chandler', 'Phoebe', 'David', 'Mike', 'Gunther', 'Janice'],
+			cardToFind: '',
+			gameComplete: false
+		};
+		return _this2;
+	}
+
+	_createClass(FriendsGame, [{
+		key: 'useMove',
+		value: function useMove() {
 			this.setState(function (prevState, props) {
-				if (prevState.score === 1) {
+				if (prevState.movesLeft === 1) {
 					return {
-						score: 0,
+						movesLeft: 0,
 						gameComplete: true
 					};
 				} else {
-					return { score: prevState.score - 1 };
+					return { movesLeft: prevState.movesLeft - 1 };
 				}
+			});
+		}
+	}, {
+		key: 'addPoint',
+		value: function addPoint() {
+			console.log('hey');
+			this.setState(function (prevState) {
+				return { points: prevState.points + 1 };
 			});
 		}
 	}, {
@@ -70,17 +114,17 @@ var App = function (_React$Component) {
 	}, {
 		key: 'handlePick',
 		value: function handlePick(card) {
-			this.setState(function (prevState) {
-				return { cardsLeft: prevState.cardsLeft.filter(function (cardToRemove) {
-						return card !== cardToRemove;
-					}) };
-			});
-
-			if (this.state.cardsLeft === 0) {
+			if (this.state.cardsLeft.length === 0) {
 				this.setState(function () {
 					return {
 						gameComplete: true
 					};
+				});
+			} else {
+				this.setState(function (prevState) {
+					return { cardsLeft: prevState.cardsLeft.filter(function (cardToRemove) {
+							return card !== cardToRemove;
+						}) };
 				});
 			}
 		}
@@ -100,22 +144,15 @@ var App = function (_React$Component) {
 	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			var _this2 = this;
+			var _this3 = this;
 
 			this.shuffleDeck(this.state.cards);
 			setTimeout(function () {
-				_this2.getCardToFind(_this2.state.cards);
-				_this2.setState(function () {
+				_this3.getCardToFind(_this3.state.cards);
+				_this3.setState(function () {
 					return { timerVisible: false };
 				});
-			}, 10000);
-		}
-	}, {
-		key: 'giveUp',
-		value: function giveUp() {
-			this.setState(function () {
-				return { gameComplete: true };
-			});
+			}, 15000);
 		}
 	}, {
 		key: 'render',
@@ -123,67 +160,169 @@ var App = function (_React$Component) {
 			if (this.state.gameComplete) {
 				return React.createElement(
 					'div',
-					{ className: 'text-center' },
+					{ className: 'windows-panel' },
 					React.createElement(
-						'h1',
-						null,
-						'Game over'
+						'div',
+						{ className: 'header' },
+						'Friends.exe'
 					),
 					React.createElement(
-						'h3',
-						null,
-						'Score: ',
-						this.state.score
-					),
-					React.createElement(
-						'a',
-						{ className: 'button', href: '/' },
-						'Play again'
+						'div',
+						{ className: 'body text-center' },
+						React.createElement(
+							'h1',
+							null,
+							this.state.points === 10 ? 'You Win!' : 'Game over'
+						),
+						React.createElement('img', { width: 30, src: this.state.points === 0 ? './img/smiley-dead.png' : './img/smiley-happy.png' }),
+						React.createElement(
+							'h2',
+							null,
+							'Score: ',
+							this.state.points
+						),
+						this.state.points > 0 ? React.createElement(
+							'h3',
+							null,
+							'Congratulations! You found ',
+							React.createElement(
+								'strong',
+								null,
+								this.state.points
+							),
+							' F.R.I.E.N.D.S! Now let\'s celebrate with a meatball sub sandwich and never go on the internet ever again.'
+						) : React.createElement(
+							'h3',
+							null,
+							'Oh no! You didn\'t find any of your F.R.I.E.N.D.S. Now they\'re trapped in the internet forever.'
+						),
+						React.createElement(
+							'a',
+							{ href: '/', className: 'button' },
+							'Play Again'
+						)
 					)
 				);
 			}
 			return React.createElement(
 				'div',
 				null,
-				this.state.timerVisible ? React.createElement(Timer, { timeleft: 10 }) : React.createElement(Instructions, { cardToFind: this.state.cardToFind }),
-				React.createElement(
-					'h3',
-					{ className: 'text-right' },
-					'Score: ',
-					this.state.score
-				),
-				React.createElement(
-					'button',
-					{ onClick: this.giveUp },
-					'Give Up'
-				),
+				this.state.timerVisible ? React.createElement(Timer, { timeleft: 15 }) : React.createElement(Instructions, { points: this.state.points, movesLeft: this.state.movesLeft, cardToFind: this.state.cardToFind }),
 				React.createElement(Cards, {
 					cards: this.state.cards,
 					cardsLeft: this.state.cardsLeft,
 					handlePick: this.handlePick,
 					cardToFind: this.state.cardToFind,
-					minusScore: this.minusScore,
-					getCardToFind: this.getCardToFind
+					useMove: this.useMove,
+					getCardToFind: this.getCardToFind,
+					addPoint: this.addPoint
 				})
 			);
 		}
 	}]);
 
-	return App;
+	return FriendsGame;
 }(React.Component);
+
+var WelcomeScreen = function WelcomeScreen(props) {
+	return React.createElement(
+		'div',
+		{ className: 'welcome-screen windows-panel text-center' },
+		React.createElement(
+			'div',
+			{ className: 'header' },
+			'Friends.exe'
+		),
+		React.createElement(
+			'div',
+			{ className: 'body' },
+			React.createElement(
+				'h1',
+				null,
+				'The cast of'
+			),
+			React.createElement('img', { width: 500, src: './img/friendsLogo.png', alt: 'friends' }),
+			React.createElement(
+				'h1',
+				null,
+				'Where are they now?'
+			),
+			React.createElement(
+				'h2',
+				{ className: 'dark' },
+				'Digital Edition'
+			),
+			React.createElement(
+				'p',
+				null,
+				'Mama Mia! Famous Days of our Lives star Joey Tribbiani has decided to get ',
+				React.createElement(
+					'em',
+					null,
+					'on line'
+				),
+				'. But there\u2019s a problem \u2013 he\'s accidentally spilled marinara sauce from his meatball sub sandwich all over the wires of his new PC, causing each of his F.R.I.E.N.D.S to become ',
+				React.createElement(
+					'strong',
+					null,
+					'trapped inside an internet-based card game!'
+				)
+			),
+			React.createElement(
+				'p',
+				null,
+				'Use your memory skills to find the F.R.I.E.N.D hidden behind each of the cards. But be careful - You only have 10 moves to save them. Good Luck!'
+			),
+			React.createElement(
+				'button',
+				{ onClick: props.startGame },
+				'Start game'
+			)
+		)
+	);
+};
 
 var Instructions = function Instructions(props) {
 	return React.createElement(
 		'div',
-		{ className: 'instructions-box' },
+		{ className: 'windows-panel' },
 		React.createElement(
-			'h1',
-			null,
-			'Where is: ',
-			props.cardToFind,
-			'?'
+			'div',
+			{ className: 'header' },
+			'Friends.exe'
 		),
-		React.createElement('img', { src: './img/' + props.cardToFind.toLowerCase() + '.jpg' })
+		React.createElement(
+			'div',
+			{ className: 'instructions-box' },
+			React.createElement(
+				'div',
+				null,
+				React.createElement(
+					'h1',
+					null,
+					'Where is: ',
+					props.cardToFind,
+					'?'
+				),
+				React.createElement(
+					'h2',
+					null,
+					'Score: ',
+					props.points
+				),
+				React.createElement(
+					'h3',
+					null,
+					'Moves left: ',
+					React.createElement(
+						'span',
+						{ style: { color: props.movesLeft <= 5 && 'red' } },
+						props.movesLeft
+					)
+				)
+			),
+			React.createElement('img', { className: 'mobile-hide', src: './img/' + props.cardToFind.toLowerCase() + '.jpg' })
+		)
 	);
 };
 
@@ -205,12 +344,21 @@ var Timer = function Timer(props) {
 	}, [counter]);
 	return React.createElement(
 		'div',
-		{ className: 'instructions-box' },
+		{ className: 'windows-panel' },
 		React.createElement(
-			'h1',
-			null,
-			'Remember the cards! Time left: ',
-			counter
+			'div',
+			{ className: 'header' },
+			'Friends.exe'
+		),
+		React.createElement(
+			'div',
+			{ className: 'instructions-box' },
+			React.createElement(
+				'h1',
+				null,
+				'Remember the cards! Game starts in: ',
+				counter
+			)
 		)
 	);
 };
@@ -218,54 +366,58 @@ var Timer = function Timer(props) {
 var Cards = function Cards(props) {
 	return React.createElement(
 		'div',
-		null,
+		{ className: 'cards-container' },
 		props.cards.map(function (card, index) {
 			return React.createElement(Card, { key: 'card-' + index,
 				cards: props.cards,
 				cardsLeft: props.cardsLeft,
 				handlePick: props.handlePick,
 				cardToFind: props.cardToFind,
-				minusScore: props.minusScore,
+				useMove: props.useMove,
 				getCardToFind: props.getCardToFind,
-				cardName: card
+				cardName: card,
+				addPoint: props.addPoint
 			});
 		})
 	);
 };
 
-var Card = function (_React$Component2) {
-	_inherits(Card, _React$Component2);
+var Card = function (_React$Component3) {
+	_inherits(Card, _React$Component3);
 
 	function Card(props) {
 		_classCallCheck(this, Card);
 
-		var _this3 = _possibleConstructorReturn(this, (Card.__proto__ || Object.getPrototypeOf(Card)).call(this, props));
+		var _this4 = _possibleConstructorReturn(this, (Card.__proto__ || Object.getPrototypeOf(Card)).call(this, props));
 
-		_this3.wrongcard = _this3.wrongcard.bind(_this3);
-		_this3.displayCard = _this3.displayCard.bind(_this3);
-		_this3.state = {
+		_this4.wrongcard = _this4.wrongcard.bind(_this4);
+		_this4.displayCard = _this4.displayCard.bind(_this4);
+		_this4.state = {
 			visible: true,
 			incorrect: false
 		};
-		return _this3;
+		return _this4;
 	}
 
 	_createClass(Card, [{
 		key: 'wrongcard',
 		value: function wrongcard() {
-			var _this4 = this;
+			var _this5 = this;
 
-			this.setState({ incorrect: true }, function () {
+			this.setState({ incorrect: true, visible: true }, function () {
 				setTimeout(function () {
-					return _this4.setState({ incorrect: false });
+					return _this5.setState({ incorrect: false, visible: false });
 				}, 500);
 			});
 		}
 	}, {
 		key: 'displayCard',
 		value: function displayCard(cardToDisplay) {
+			if (!this.state.visible) {
+				this.props.useMove();
+			}
+
 			if (cardToDisplay === this.props.cardToFind) {
-				console.log('correct');
 				this.setState(function (prevState) {
 					return {
 						visible: true
@@ -273,30 +425,29 @@ var Card = function (_React$Component2) {
 				});
 
 				this.props.handlePick(cardToDisplay);
+				this.props.addPoint();
 				this.props.getCardToFind(this.props.cardsLeft);
 			} else if (!this.state.visible) {
-
 				this.wrongcard(cardToDisplay);
-				this.props.minusScore();
 			}
 		}
 	}, {
 		key: 'componentDidMount',
 		value: function componentDidMount() {
-			var _this5 = this;
+			var _this6 = this;
 
 			setTimeout(function () {
-				_this5.setState(function () {
+				_this6.setState(function () {
 					return {
 						visible: false
 					};
 				});
-			}, 10000);
+			}, 15000);
 		}
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this6 = this;
+			var _this7 = this;
 
 			var backgroundStyle = {
 				backgroundImage: 'url(./img/' + this.props.cardName.toLowerCase() + '.jpg)'
@@ -305,20 +456,12 @@ var Card = function (_React$Component2) {
 			return React.createElement(
 				'div',
 				{ className: 'card ' + (this.state.visible ? 'visible' : '') + ' ' + (this.state.incorrect ? 'incorrect' : ''), onClick: function onClick(e) {
-						_this6.displayCard(_this6.props.cardName);
+						_this7.displayCard(_this7.props.cardName);
 					} },
 				React.createElement(
 					'div',
 					{ className: 'card-inner' },
-					React.createElement(
-						'div',
-						{ className: 'flip-card-front' },
-						React.createElement(
-							'span',
-							null,
-							'?'
-						)
-					),
+					React.createElement('div', { className: 'flip-card-front' }),
 					React.createElement(
 						'div',
 						{ className: 'flip-card-back' },

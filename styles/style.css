@@ -1,25 +1,55 @@
+@font-face {
+    font-family: 'Windows 95';
+    src: url('../fonts/w-95-sans-serif.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
 *, *:before, *:after {
     box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    color: #000;
+    font-family: "Windows 95", sans-serif;
+    font-size: 0.6em;
+    letter-spacing: 0.3px;
+    background-color: #008081;
+    color: #0A0A0A;
+}
+
+img {
+    max-width: 100%;
+}
+
+p {
+    line-height: 2;
 }
 
 .container {
     width: 100%;
     max-width: 1080px;
     margin: auto;
+    padding: 1em;
 }
 
 .card {
     background-color: transparent;
-    width: 200px;
-    height: 260px;
+    width: 180px;
+    height: 250px;
     perspective: 800px;
     display: inline-block;
-    margin: .5em;
+    margin: 15px;
+}
+
+.card:hover {
+    cursor: pointer;
+}
+
+.cards-container {
+    margin: 2em auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .card-inner {
@@ -30,14 +60,17 @@ body {
     transition: transform 0.5s;
     transform-style: preserve-3d;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
 }
 
 .card.incorrect .flip-card-front {
-    background: red;
+    border: 2px solid red;
 }
 
+.card.incorrect .card-inner,
 .card.visible .card-inner {
     transform: rotateY(180deg);
+    pointer-events: none;
 }
 
 .flip-card-front, .flip-card-back {
@@ -47,19 +80,12 @@ body {
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     transition: background-color 0.5s;
-}
-
-.flip-card-front {
-    background-color: #bbb;
-    color: black;
-}
-
-.flip-card-front span {
-    font-size: 4em;
-    color: #ffffff;
-    width: 100%;
-    margin: 50px auto;
-    display: block;
+    background-image: url('/img/card-back.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 5px;
+    overflow: hidden;
 }
 
 .flip-card-back {
@@ -83,14 +109,13 @@ body {
     top: 0;
     background-position: center;
     background-size: cover;
+    border: 10px solid white;
 }
 
 .instructions-box {
     display: flex;
     height: 180px;
     align-items: center;
-    background: #eeeeee;
-    border-radius: 5px;
     padding: 20px 50px;
     justify-content: space-between;
 }
@@ -98,13 +123,88 @@ body {
 .instructions-box img {
     width: 150px;
     height: 150px;
-    border-radius: 50%;
+    border: 2px solid #0A0A0A;
     object-fit: cover;
 }
 
 .text-center {
     text-align: center;
 }
+
 .text-right {
     text-align: right;
 }
+
+button, a.button {
+    position: relative;
+    transition: all 0.2s ease;
+    letter-spacing: 0.025em;
+    border-radius: 0.125rem;
+    padding: .6rem 2rem;
+    background-color: #cccccc;
+    border: 1px solid #0A0A0A;
+    margin: 1em 0;
+    text-decoration: none;
+    display: inline-block;
+    color: #0A0A0A;
+}
+
+button:before, a.button:before {
+    content: '';
+    position: absolute;
+    box-sizing: border-box;
+    display: block;
+    background: transparent;
+    z-index: 9;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-top: 2px solid white;
+    border-left: 2px solid white;
+    border-right: 2px solid #858585;
+    border-bottom: 2px solid #858585;
+}
+
+button:hover, a.button:hover {
+    background: #C0C0C0;
+    cursor: pointer;
+}
+
+.windows-panel {
+    border-top: 2px solid white;
+    border-left: 2px solid white;
+    border-right: 2px solid #393939;
+    border-bottom: 2px solid #393939;
+    border-radius: 0;
+    background: #cccccc;
+    max-width: 700px;
+    margin: auto;
+}
+
+.windows-panel .header {
+    background: #000181;
+    color: white;
+    position: relative;
+    padding: 4px;
+    border-radius: 0;
+    border: 2px solid #BDBDBD;
+    text-align: left;
+}
+
+.windows-panel .body {
+    padding: 30px;
+}
+
+.dark {
+    background: black;
+    color: white;
+    padding: 5px;
+}
+
+@media all and (max-width: 440px) {
+    .mobile-hide {
+        display: none;
+    }
+}
+
